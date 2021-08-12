@@ -1,8 +1,8 @@
 #include <cmath>
 
-#include "raylib.h"
-#include "pendulum.hpp"
 #include "display.hpp"
+#include "pendulum.hpp"
+#include "raylib.h"
 
 int main()
 {
@@ -15,7 +15,9 @@ int main()
     SetConfigFlags(FLAG_VSYNC_HINT);
     InitWindow(screenWidth, screenHeight, "Double Pendulum");
 
-    DoublePendulum pend1 = DoublePendulum(Pendulum{9.0, 150, PI / 2.0, Vector2{screenWidth / 2, 350.0}, Vector2{screenWidth / 2, 500.0}, false, 10.0}, Pendulum{9.0, 150, PI / 2.0, Vector2{screenWidth / 2, 500.0}, Vector2{screenWidth / 2, 650.0}, false, 10.0});
+    DoublePendulum pend1 = DoublePendulum(
+        Pendulum{9.0, 150, PI / 2.0, Vector2{screenWidth / 2, 350.0}, Vector2{screenWidth / 2, 500.0}, false, 10.0},
+        Pendulum{9.0, 150, PI / 2.0, Vector2{screenWidth / 2, 500.0}, Vector2{screenWidth / 2, 650.0}, false, 10.0});
 
     RenderTexture2D traceBG = LoadRenderTexture(screenWidth, screenHeight);
     BeginTextureMode(traceBG);
@@ -47,11 +49,11 @@ int main()
             BeginTextureMode(traceBG);
             if (oldTrailPos.x != -1.)
             {
-                DrawLine(pend1.p2.position.x, screenHeight - pend1.p2.position.y, oldTrailPos.x, screenHeight - oldTrailPos.y, RED);
+                DrawLine(pend1.p2.position.x, screenHeight - pend1.p2.position.y, oldTrailPos.x,
+                         screenHeight - oldTrailPos.y, RED);
             }
             EndTextureMode();
             oldTrailPos = pend1.p2.position;
-
         }
 
         pend1.updatePos();

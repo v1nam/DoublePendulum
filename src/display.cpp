@@ -1,5 +1,5 @@
-#include "raylib.h"
 #include "pendulum.hpp"
+#include "raylib.h"
 #include <cmath>
 
 double distanceSquared(Vector2 p1, Vector2 p2)
@@ -7,7 +7,7 @@ double distanceSquared(Vector2 p1, Vector2 p2)
     return pow(p2.x - p1.x, 2.0) + pow(p2.y - p1.y, 2.0);
 }
 
-void drawDoublePend(DoublePendulum& doubp, Color col)
+void drawDoublePend(DoublePendulum &doubp, Color col)
 {
     DrawLineV(doubp.p1.start, doubp.p1.position, BLACK);
     DrawCircleV(doubp.p1.position, doubp.p1.radius, col);
@@ -16,11 +16,11 @@ void drawDoublePend(DoublePendulum& doubp, Color col)
     DrawCircleV(doubp.p2.position, doubp.p2.radius, col);
 }
 
-void handleBobDrag(DoublePendulum& doubp)
+void handleBobDrag(DoublePendulum &doubp)
 {
     Vector2 mousePos = GetMousePosition();
-    Pendulum& p1 = doubp.p1;
-    Pendulum& p2 = doubp.p2;
+    Pendulum &p1 = doubp.p1;
+    Pendulum &p2 = doubp.p2;
     if (distanceSquared(mousePos, p1.position) <= pow(p1.radius, 2.0) && IsMouseButtonPressed(0))
     {
         p1.moveBob = true;

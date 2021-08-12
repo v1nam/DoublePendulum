@@ -1,5 +1,5 @@
-#include "pendulum.hpp"
 #include <cmath>
+#include "pendulum.hpp"
 
 DoublePendulum::DoublePendulum(Pendulum p1, Pendulum p2)
 {
