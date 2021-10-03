@@ -17,11 +17,11 @@ struct Pendulum
 class DoublePendulum
 {
   public:
-    const double g = 0.5;
+    const double g = 980;
     const float damp = 1.0;
     Pendulum p1;
     Pendulum p2;
     DoublePendulum(Pendulum p1, Pendulum p2);
-    void moveObjects();
+    void moveObjects(float dt);
     void updatePos();
 };
