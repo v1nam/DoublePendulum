@@ -5,5 +5,6 @@ A double pendulum simulation.
 
 ### Controls
 - Press `space` to pause/resume.
-- Click on one of the bobs to drag them.
+- Drag the ends of the rods with the mouse to move them.
 - Press `C` to clear trail.
+- Press `T` to toggle between showing the full trail history.
