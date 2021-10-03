@@ -7,7 +7,7 @@ DoublePendulum::DoublePendulum(Pendulum p1, Pendulum p2)
     this->p2 = p2;
 }
 
-void DoublePendulum::moveObjects()
+void DoublePendulum::moveObjects(float dt)
 {
     const float &m1 = p1.mass;
     const float &m2 = p2.mass;
@@ -33,14 +33,14 @@ void DoublePendulum::moveObjects()
     p2Acc = p2Acc * 2.0 * sin(t1 - t2);
     p2Acc = p2Acc / (l2 * (2.0 * m1 + m2 - m2 * cos(2.0 * (t1 - t2))));
 
-    p1.velocity += p1Acc;
-    p2.velocity += p2Acc;
+    p1.velocity += p1Acc * dt;
+    p2.velocity += p2Acc * dt;
 
     p1.velocity /= damp;
     p2.velocity /= damp;
 
-    p1.angle += p1.velocity;
-    p2.angle += p2.velocity;
+    p1.angle += p1.velocity * dt;
+    p2.angle += p2.velocity * dt;
 }
 
 void DoublePendulum::updatePos()
