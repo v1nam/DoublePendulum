@@ -9,11 +9,11 @@ double distanceSquared(Vector2 p1, Vector2 p2)
 
 void drawDoublePend(DoublePendulum &doubp, Color col)
 {
-    DrawLineV(doubp.p1.start, doubp.p1.position, BLACK);
-    DrawCircleV(doubp.p1.position, doubp.p1.radius, col);
+    DrawLineEx(doubp.p1.start, doubp.p1.position, 8.f, col);
+    DrawLineEx(doubp.p2.start, doubp.p2.position, 8.f, col);
 
-    DrawLineV(doubp.p2.start, doubp.p2.position, BLACK);
-    DrawCircleV(doubp.p2.position, doubp.p2.radius, col);
+    //DrawCircleV(doubp.p1.position, doubp.p1.radius, col);
+    //DrawCircleV(doubp.p2.position, doubp.p2.radius, col);
 }
 
 void handleBobDrag(DoublePendulum &doubp)
