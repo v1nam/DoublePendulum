@@ -22,22 +22,23 @@ void main()
 {
     // Texel color fetching from texture sampler
     vec4 source = texture(texture0, fragTexCoord);
+    finalColor = source;
+    if (showOldTrails == 1) {
+        vec4 sum = vec4(0);
+        vec2 sizeFactor = vec2(1)/size*quality;
 
-    vec4 sum = vec4(0);
-    vec2 sizeFactor = vec2(1)/size*quality;
+        const int range = 2;
 
-    const int range = 2;
-
-    for (int x = -range; x <= range; x++)
-    {
-        for (int y = -range; y <= range; y++)
+        for (int x = -range; x <= range; x++)
         {
-            sum += texture(texture0, fragTexCoord + vec2(x, y)*sizeFactor);
+            for (int y = -range; y <= range; y++)
+            {
+                sum += texture(texture0, fragTexCoord + vec2(x, y)*sizeFactor);
+            }
         }
-    }
 
-    // Calculate final fragment color
-    finalColor = ((sum/(samples*samples)) + source);
-    if (showOldTrails == 1)
+        // Calculate final fragment color
+        finalColor = ((sum/(samples*samples)) + source);
         finalColor = vec4(finalColor.rgb, 1.);
+    }
 }
