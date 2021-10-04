@@ -1,11 +1,6 @@
 #include <cmath>
+#include <iostream>
 #include "pendulum.hpp"
-
-DoublePendulum::DoublePendulum(Pendulum p1, Pendulum p2)
-{
-    this->p1 = p1;
-    this->p2 = p2;
-}
 
 void DoublePendulum::moveObjects(float dt)
 {
@@ -41,6 +36,17 @@ void DoublePendulum::moveObjects(float dt)
 
     p1.angle += p1.velocity * dt;
     p2.angle += p2.velocity * dt;
+
+    /*double p1KE = (p1.mass * p1.velocity * p1.velocity) / 2.0;
+    double p1PE = p1.mass * g * (700.f - p1.position.y);
+
+    double p2KE = (p2.mass * p2.velocity * p2.velocity) / 2.0;
+    double p2PE = p2.mass * g * (700.f - p2.position.y);
+
+    std::cout << "KE 1: " << p1KE << "   PE 1: " << p1PE << "\n";
+    std::cout << "KE 2: " << p2KE << "   PE 2: " << p2PE << "\n";
+    std::cout << "Total energy: " << p1KE + p1PE + p2KE + p2PE << "\n\n";*/
+
 }
 
 void DoublePendulum::updatePos()
