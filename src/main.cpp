@@ -1,4 +1,5 @@
 #include <cmath>
+#include <vector>
 
 #include "display.hpp"
 #include "pendulum.hpp"
@@ -10,19 +11,24 @@ int main()
     const int screenHeight = 700;
 
     bool paused = true;
-    Vector2 oldTrailPos = Vector2{-1., 0.};
 
     SetConfigFlags(FLAG_VSYNC_HINT);
     InitWindow(screenWidth, screenHeight, "Double Pendulum");
 
-    DoublePendulum pend1 = DoublePendulum(
-        Pendulum{9.0, 140, PI / 2.0, Vector2{screenWidth / 2, 350.0}, Vector2{screenWidth / 2, 500.0}, false, 10.0},
-        Pendulum{9.0, 140, PI / 2.0, Vector2{screenWidth / 2, 500.0}, Vector2{screenWidth / 2, 650.0}, false, 10.0});
+    double initialAngle = PI / 2.0;
+    std::vector<DoublePendulum> pendulums;
+
+    Color colArr[4] = {Color{0, 255, 178, 255}, Color{0, 178, 255, 255}, Color{255, 0, 78, 255}, Color{255, 158, 0, 255}};
+
+    for (int i(0); i < 4; i++)
+        pendulums.emplace_back(DoublePendulum(
+            Pendulum(9.f, 140, initialAngle + i * 0.0008, Vector2{screenWidth / 2, 350.f}, Vector2{screenWidth / 2, 500.f}, 10.f),
+            Pendulum(9.f, 140, initialAngle + i * 0.0008, Vector2{screenWidth / 2, 500.f}, Vector2{screenWidth / 2, 650.f}, 10.f), colArr[i]));
 
     RenderTexture2D traceBG = LoadRenderTexture(screenWidth, screenHeight);
     Shader shader = LoadShader(0, "glow.glsl");
     int trailUniformLoc = GetShaderLocation(shader, "showOldTrails");
-    int showOldTrails = 1;
+    int showOldTrails = 0;
 
     float fadeBG = 0.0;
 
@@ -41,7 +47,6 @@ int main()
             paused = !paused;
 
         else if (IsKeyPressed(KEY_C)) {
-            oldTrailPos.x = -1.;
             BeginTextureMode(traceBG);
             ClearBackground(BLACK);
             EndTextureMode();
@@ -50,35 +55,35 @@ int main()
             showOldTrails = !showOldTrails;
 
         if (paused)
-            handleBobDrag(pend1);
+            handleBobDrag(pendulums[0]);
         else {
             float dt = GetFrameTime();
-            pend1.moveObjects(dt);
             fadeBG += dt;
 
             BeginTextureMode(traceBG);
-            if (oldTrailPos.x != -1.)
-            {
-                if (fadeBG >= 0.05) {
-                    fadeBG = 0.0;
-                    BeginBlendMode(BLEND_ALPHA);
-                    DrawRectangle(0, 0, screenWidth, screenHeight, ColorFromNormalized(Vector4{0, 0.0666f, 0.0465f, 0.05f}));
-                    EndBlendMode();
-                }
-                DrawLine(pend1.p2.position.x, screenHeight - pend1.p2.position.y, oldTrailPos.x,
-                         screenHeight - oldTrailPos.y, Color{0, 255, 178, 255});
+            if (fadeBG >= 0.05) {
+                fadeBG = 0.0;
+                BeginBlendMode(BLEND_ALPHA);
+                DrawRectangle(0, 0, screenWidth, screenHeight, ColorFromNormalized(Vector4{0, 0.f, 0.f, 0.05f}));
+                EndBlendMode();
+            }
+            for (DoublePendulum& pend: pendulums) {
+                pend.moveObjects(dt);
+                DrawLine(pend.p2.position.x, screenHeight - pend.p2.position.y, pend.p2.oldPos.x,
+                        screenHeight - pend.p2.oldPos.y, pend.trailColor);
+                pend.p2.oldPos = pend.p2.position;
             }
             EndTextureMode();
-            oldTrailPos = pend1.p2.position;
         }
-
-        pend1.updatePos();
 
         BeginShaderMode(shader);
         DrawTexture(traceBG.texture, 0, 0, WHITE);
         EndShaderMode();
-
-        drawDoublePend(pend1, Color{60, 60, 65, 255});
+        
+        for (DoublePendulum& pend: pendulums) {
+            pend.updatePos();
+            drawDoublePend(pend, Color{60, 60, 65, 255});
+        }
         DrawFPS(10, 10);
 
         EndDrawing();
